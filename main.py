@@ -1,7 +1,16 @@
-
+from pvrecorder import PvRecorder
+import pvporcupine
+import os
+import struct
+import vosk
+import json
+import time
 
 # Путь до модели
+
     # exit(1) Если ненайдена Завершаем с ошибкой 
+
+
 # Инициализация модели Vosk и создание калди_регонайзера
 
 # Основная функция распознавания
