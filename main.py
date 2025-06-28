@@ -1,3 +1,4 @@
+from winotify import Notification
 from pvrecorder import PvRecorder
 import pvporcupine
 import os
@@ -6,16 +7,14 @@ import vosk
 import json
 import time
 
-# Путь до модели
+from app.config.notification import notification
 
-    # exit(1) Если ненайдена Завершаем с ошибкой 
-
-
-# Инициализация модели Vosk и создание калди_регонайзера
-
-# Основная функция распознавания
-
-# остановим запись во время обработки
+# Создаём файл токеном при первом запуске
+if not os.path.exists("app/env/token.env"):
+    with open("app/env/token.env", 'w', encoding="UTF-8") as file:
+        file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+    
+    
     # Только если не тишина, иначе вернём false
 
     # Команды: если ниодна не выполнилась нужно вернуть false
@@ -70,6 +69,8 @@ import time
 
 if __name__ == "__main__":
     print("start")
+    notification("First launch", "the token.env file was created, at app/env/token.env", 'long')
+
 
 '''
 Vosk model - vosk-model-small-ru-0.22
