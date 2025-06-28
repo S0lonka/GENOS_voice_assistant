@@ -2,7 +2,7 @@ from winotify import Notification
 import os
 
 # Функция по созданию уведомлений (windows)
-def notification(title: str, msg: str, duration: str) -> None:
+def notification(title: str, msg: str, duration: str = "long") -> None:
     # Путь до иконки
     current_dir = os.path.dirname(__file__)  
     icon_path = os.path.join(current_dir, "..", "icon", "Genos_icon.ico")

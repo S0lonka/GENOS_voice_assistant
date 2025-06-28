@@ -8,22 +8,32 @@ import json
 import time
 
 from app.config.notification import notification
+from app.config.config import *
 
-
-def create_token_env():
-    '''Создаём файл токеном, если его нет'''
+def createFile_token_env():
+    '''Создаёт  файл токеном, если его нет'''
 
     if not os.path.exists("app/env/token.env"):
         with open("app/env/token.env", 'w', encoding="UTF-8") as file:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+
+        notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+
+        exit(0) # Завершает без ошибки
     
 
-# Путь до модели
-    # exit(1) Если ненайдена Завершаем с ошибкой 
+def check_model_path(model_path: str) -> None:
+    '''Проверяет путь до модели и уведомляет'''
+    if not os.path.exists(model_path):
+        notification("Check model path", f"Model not found, on the way: {model_path}")
+        exit(1)
+
+
 # Инициализация модели Vosk и создание калди_регонайзера
 
-# Основная функция распознавания
-
+# Основная функция ответа
+def voice_helper_responce():
+    pass
     # остановим запись во время обработки
     # Только если не тишина, иначе вернём false
 
@@ -36,7 +46,8 @@ def create_token_env():
 
 
 # main
-
+def main():
+    pass
     # devices = PvRecorder.get_available_devices()
     # Путь до имени помошника и ключ
     # Обработчик ключевого слова(porcupine создаём модель с ключём access_key и ключевым словом keyword_paths)
@@ -79,7 +90,15 @@ def create_token_env():
 
 if __name__ == "__main__":
     print("start")
-    notification("First launch", "the token.env file was created, at app/env/token.env", 'long')
+    # Ловим все ошибки на стадии разработки
+    try:
+        createFile_token_env()
+        check_model_path(MODEL_PATH)
+
+        main()
+
+    except Exception as e:
+        print(e)
 
 
 '''
