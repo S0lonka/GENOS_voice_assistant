@@ -9,10 +9,13 @@ import time
 
 from app.config.notification import notification
 
-# Создаём файл токеном при первом запуске
-if not os.path.exists("app/env/token.env"):
-    with open("app/env/token.env", 'w', encoding="UTF-8") as file:
-        file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+
+def create_token_env():
+    '''Создаём файл токеном, если его нет'''
+    
+    if not os.path.exists("app/env/token.env"):
+        with open("app/env/token.env", 'w', encoding="UTF-8") as file:
+            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
     
     
     # Только если не тишина, иначе вернём false
