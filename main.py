@@ -12,12 +12,19 @@ from app.config.notification import notification
 
 def create_token_env():
     '''Создаём файл токеном, если его нет'''
-    
+
     if not os.path.exists("app/env/token.env"):
         with open("app/env/token.env", 'w', encoding="UTF-8") as file:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
     
-    
+
+# Путь до модели
+    # exit(1) Если ненайдена Завершаем с ошибкой 
+# Инициализация модели Vosk и создание калди_регонайзера
+
+# Основная функция распознавания
+
+    # остановим запись во время обработки
     # Только если не тишина, иначе вернём false
 
     # Команды: если ниодна не выполнилась нужно вернуть false
