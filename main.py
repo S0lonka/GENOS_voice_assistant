@@ -61,6 +61,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
                 return False
 
         else:
+            print("Ничего не распознано")
             return False
             
     finally:
@@ -123,8 +124,9 @@ if __name__ == "__main__":
     try:
         createFile_token_env()
         check_model_path(MODEL_PATH)
-
+        
         main()
+        
 
     except Exception as e:
         print(e)
