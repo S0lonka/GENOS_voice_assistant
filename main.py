@@ -1,13 +1,18 @@
-from pvrecorder import PvRecorder
-import pvporcupine
 import os
 import struct
-import vosk
 import json
 import time
 
+# models
+from pvrecorder import PvRecorder
+import pvporcupine
+import vosk
+
+# audio
+import simpleaudio as sa
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
 
+#project
 from app.config.notification import notification
 from app.config.config import *
 
@@ -21,7 +26,7 @@ def createFile_token_env():
         notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
 
         exit(0) # Завершает без ошибки
-    
+
 
 def check_model_path(model_path: str) -> None:
     '''Проверяет путь до модели и уведомляет'''
@@ -41,7 +46,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
         if voice != "": # Только если не тишина, иначе вернём false
             print(f"\nРаспознано: {voice}")
 
-            if voice == "привет": # Команды: если ни одна не выполнилась нужно вернуть false
+            if voice == "привет":
                 print("Привет я на связи")
                 return True
 
@@ -49,7 +54,6 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
                 print("Выключаюсь")
                 recorder.delete()
                 exit(0)
-            # При команде выключись - удаляем рекордер и выходи без ошибки exit(0)
 
             else:
                 return False
