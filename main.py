@@ -46,7 +46,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
     try:
         recorder.stop() # остановим запись во время обработки
         if voice != "": # Только если не тишина, иначе вернём false
-            print(f"\nРаспознано: {voice}")
+            print(f"\n- Распознано: {voice}")
 
             if voice == "привет":
                 print("Привет я на связи")
@@ -76,10 +76,11 @@ def main():
     recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 
     recorder.start()
-    print("Я начал работу")
+    print("- Я начал работу")
 
     # Заранее уведём время в меньшее(1000) чтобы несработал while
     ltc = time.time() - 1000
+    lisen_commands_flag = False # Флаг - что нас слушает бот
 
     while True:
         try:
@@ -88,27 +89,34 @@ def main():
             
             if pcm_result >= 0: # если слышит ключевое слово
                 
-                print("Я тебя слушаю")
+                print("- Я тебя слушаю")
                 play("assistant_start_lisen", recorder)
                 kaldi_reс.Reset() 
     
                 ltc = time.time()# обновляем время
+                lisen_commands_flag = True
 
 
-            # TODO: Если время вышло то проигрывать слабый звук выключения(Означает что бот перестаёт слушать)
-            while time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы не входи цикл
-                pcm = recorder.read() # читаем аудио(в 0 и 1)
 
-                audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
-                audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
+            while lisen_commands_flag:
+                if time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
+                    pcm = recorder.read() # читаем аудио(в 0 и 1)
 
-                if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
-                    if voice_helper_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
-                        ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
+                    audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
+                    audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
 
-                    kaldi_reс.Reset() 
-                    recorder.start()
-                    break
+                    if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
+                        if voice_helper_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
+                            ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
+
+                        kaldi_reс.Reset() 
+                        recorder.start()
+                        break
+                else:
+                    print("- Прекращаю слушать")
+                    play("assistant_stop_lisen", recorder)
+                    lisen_commands_flag = False 
+                    
                     
                     
 
