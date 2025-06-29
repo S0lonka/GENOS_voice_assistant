@@ -15,6 +15,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 #project
 from app.config.notification import notification
 from app.config.config import *
+from app.config.play_sound import play
 
 def createFile_token_env() -> None:
     '''Создаёт  файл токеном, если его нет'''
@@ -86,12 +87,12 @@ def main():
             
             if pcm_result >= 0: # если слышит ключевое слово
                 
-                recorder.stop()
-                kaldi_reс.Reset()
-                print("Я тебя слушаю") # TODO: Реализация голосового ответа
-                recorder.start()
-
+                print("Я тебя слушаю")
+                play("assistant_start_lisen", recorder)
+                kaldi_reс.Reset() 
+    
                 ltc = time.time()# обновляем время
+
 
             # TODO: Если время вышло то проигрывать слабый звук выключения(Означает что бот перестаёт слушать)
             while time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы не входи цикл
@@ -105,8 +106,10 @@ def main():
                         ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
 
                     kaldi_reс.Reset() 
-                    recorder.start() 
+                    recorder.start()
                     break
+                    
+                    
 
         except KeyboardInterrupt:
             print("Error stop...")
