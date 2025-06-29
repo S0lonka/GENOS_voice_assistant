@@ -1,4 +1,3 @@
-from winotify import Notification
 from pvrecorder import PvRecorder
 import pvporcupine
 import os
@@ -30,62 +29,82 @@ def check_model_path(model_path: str) -> None:
 
 
 # Инициализация модели Vosk и создание калди_регонайзера
+model = vosk.Model(MODEL_PATH)
+kaldi_reс = vosk.KaldiRecognizer(model, 16000)
 
 # Основная функция ответа
-def voice_helper_responce():
-    pass
-    # остановим запись во время обработки
-    # Только если не тишина, иначе вернём false
+def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
+    try:
+        recorder.stop() # остановим запись во время обработки
+        if voice != "": # Только если не тишина, иначе вернём false
+            print(f"\nРаспознано: {voice}")
 
-    # Команды: если ниодна не выполнилась нужно вернуть false
+            if voice == "привет": # Команды: если ни одна не выполнилась нужно вернуть false
+                print("Привет я на связи")
+                return True
 
-    # При команде выключись - удаляем рекордер и выходи без ошибки exit(0)
+            elif voice == "выключись":
+                print("Выключаюсь")
+                recorder.delete()
+                exit(0)
+            # При команде выключись - удаляем рекордер и выходи без ошибки exit(0)
 
+            else:
+                return False
 
-    #? очистка
+        else:
+            return False
+            
+    finally:
+        kaldi_reс.Reset() #? очистка
 
 
 # main
 def main():
-    pass
     # devices = PvRecorder.get_available_devices()
-    # Путь до имени помошника и ключ
-    # Обработчик ключевого слова(porcupine создаём модель с ключём access_key и ключевым словом keyword_paths)
+    
+    porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[HELPERNAME_PATH])
+    recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 
-    # Создаём запись аудио и начинаем запись(индекс устройства и длина фрейма=порцупайн.длина фрейма)
+    recorder.start()
+    print("Я начал работу")
 
     # Заранее уведём время в меньшее(1000) чтобы несработал while
+    ltc = time.time() - 1000
 
-    # Основной цикл
+    while True:
+        try:
+            pcm = recorder.read() # читаем аудио(в 0 и 1)
+            pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
+            
+            if pcm_result >= 0: # если слышит ключевое слово
+                
+                recorder.stop()
+                kaldi_reс.Reset()
+                print("Я тебя слушаю")
+                recorder.start()
 
-    # проверка на ошибки с остановкой и удалением рекордера
+                ltc = time.time()# обновляем время
 
-    # читаем аудио(в 0 и 1)
-    # возвращает 0 если слышит ключевое слово
+            while time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы не входи цикл
+                pcm = recorder.read() # читаем аудио(в 0 и 1)
 
-    # если слышит ключевое слово
-    # останавливаем запись 
-    # и очищаем буфер
+                audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
+                audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
 
-    # После сказанного слова возобновляем запись
+                if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
+                    if voice_helper_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
+                        ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
 
-    # обновляем время
+                    kaldi_reс.Reset() 
+                    recorder.start() 
+                    break
 
-    # Если небыло ключевого слова то - на - даёт + и мы не входи цикл(время - ltc <= 10)
-    # читаем аудио(в 0 и 1)
+        except KeyboardInterrupt:
+            print("Error stop...")
+            recorder.stop()
+            recorder.delete()
 
-    #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
-    # преобразование в байты struct.pack("%dh" % len(pcm), *pcm)
-
-    # Если распознано возвращает 1(подтвержаем волну аудио даты через калди рек)
-
-    # json.loads(kaldi_rec.Result())["text"] это и есть Voice
-    # Возвращает True если было задействованно ключевое слово
-    # Программа выполнилась и мы снова готовы ждать 10 сек(обновляем время)
-
-    # Очищаем буфер kaldi_rec
-    # Снова начинаем запись
-    # Выходим из циклв
 
 
 if __name__ == "__main__":
@@ -99,3 +118,4 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(e)
+        
