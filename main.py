@@ -16,7 +16,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from app.config.notification import notification
 from app.config.config import *
 
-def createFile_token_env():
+def createFile_token_env() -> None:
     '''Создаёт  файл токеном, если его нет'''
 
     if not os.path.exists("app/env/token.env"):
@@ -114,7 +114,6 @@ def main():
 
 
 if __name__ == "__main__":
-    print("start")
     # Ловим все ошибки на стадии разработки
     try:
         createFile_token_env()
