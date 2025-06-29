@@ -41,6 +41,7 @@ kaldi_reс = vosk.KaldiRecognizer(model, 16000)
 
 # Основная функция ответа
 def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
+    # TODO: add Опредление команды - иначе ответ нейросети
     try:
         recorder.stop() # остановим запись во время обработки
         if voice != "": # Только если не тишина, иначе вернём false
@@ -65,7 +66,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
         kaldi_reс.Reset() #? очистка
 
 
-# main
+
 def main():
     # devices = PvRecorder.get_available_devices()
     
@@ -87,11 +88,12 @@ def main():
                 
                 recorder.stop()
                 kaldi_reс.Reset()
-                print("Я тебя слушаю")
+                print("Я тебя слушаю") # TODO: Реализация голосового ответа
                 recorder.start()
 
                 ltc = time.time()# обновляем время
 
+            # TODO: Если время вышло то проигрывать слабый звук выключения(Означает что бот перестаёт слушать)
             while time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы не входи цикл
                 pcm = recorder.read() # читаем аудио(в 0 и 1)
 
