@@ -6,6 +6,8 @@ import vosk
 import json
 import time
 
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
+
 from app.config.notification import notification
 from app.config.config import *
 
