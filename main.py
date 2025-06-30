@@ -22,16 +22,31 @@ from app.config.play_sound import play
 def createFile_token_env() -> bool:
     '''Создаёт  файл токеном, если его нет'''
 
-    if not os.path.exists("app\\env\\token.env"):
+    if not os.path.exists(TOKEN_ENV_PATH):
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
-        with open("app\\env\\token.env", 'w', encoding="UTF-8") as file:
+        with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
             notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
-            
+
         return False
     else:
         return True
+
+
+def checkFile_token_env():
+    '''Провернка на то что введён токен'''
+    with open(TOKEN_ENV_PATH, 'r', encoding="UTF-8") as file:
+        token_env_text = file.read()
+
+        # Проверям чтобы был введён токен
+        if token_env_text in ["PICOVOICE_TOKEN=<токен_picovoice>", ""]:
+            notification("Not found PICOVOICE_TOKEN", "Please fill in the field with the token on the path app/env/token.env")
+            return False
+        else:
+            return True
+
+        
 
 
 def check_model_path(model_path: str) -> bool:
@@ -141,7 +156,8 @@ if __name__ == "__main__":
         atexit.register(on_exit) # Добавляет звук при завершении программы
 
         # Проверяем токен и путь до модели
-        if createFile_token_env() and check_model_path(MODEL_PATH):
+
+        if createFile_token_env() and checkFile_token_env() and check_model_path(MODEL_PATH):
             # Инициализация модели Vosk и создание калди_регонайзера
             model = vosk.Model(MODEL_PATH)
             kaldi_reс = vosk.KaldiRecognizer(model, 16000)

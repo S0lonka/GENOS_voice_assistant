@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 import os
 
-load_dotenv("app\\env\\token.env")
+TOKEN_ENV_PATH = "app\\env\\token.env"
+load_dotenv(TOKEN_ENV_PATH)
 
 '''Vosk model - vosk-model-small-ru-0.22'''
 MODEL_PATH = "app\\model"
