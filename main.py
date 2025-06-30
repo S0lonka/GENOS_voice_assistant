@@ -42,12 +42,13 @@ def check_model_path(model_path: str) -> bool:
         return True
 
 def on_exit():
-    play("assistant_deactivate").wait_done()
+    '''Для добавления в exit() и проигрывания звука при выключении'''
+    play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
-atexit.register(on_exit)
 
-# Основная функция ответа
+
+#! Основная функция ответа
 def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
     # TODO: add Опредление команды - иначе ответ нейросети
     try:
@@ -136,6 +137,8 @@ def main():
 if __name__ == "__main__":
     # Ловим все ошибки на стадии разработки
     try:
+        atexit.register(on_exit) # Добавляет звук при завершении программы
+
         # Проверяем токен и путь до модели
         if createFile_token_env() and check_model_path(MODEL_PATH):
             # Инициализация модели Vosk и создание калди_регонайзера
