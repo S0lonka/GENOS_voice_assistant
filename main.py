@@ -10,7 +10,6 @@ import pvporcupine
 import vosk
 
 # audio
-import simpleaudio as sa
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
 
 #project
@@ -23,11 +22,13 @@ from app.config.play_sound import play
 def createFile_token_env() -> bool:
     '''Создаёт  файл токеном, если его нет'''
 
-    if not os.path.exists("app/env/token.env"):
-        with open("app/env/token.env", 'w', encoding="UTF-8") as file:
-            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+    if not os.path.exists("app\\env\\token.env"):
+        os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
-        notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+        with open("app\\env\\token.env", 'w', encoding="UTF-8") as file:
+            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+            notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+            
         return False
     else:
         return True
