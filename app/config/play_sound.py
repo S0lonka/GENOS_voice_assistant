@@ -1,8 +1,9 @@
 import simpleaudio as sa
+import simpleaudio
 from pvrecorder import PvRecorder
 from typing import Optional
 
-def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> None:
+def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
     '''Функция проигрывает звук по нужному пути,
     сразу заботясь о остановке и запуске записи
     
@@ -18,5 +19,7 @@ def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> None:
 
     if recorder:
         recorder.start()
+
+    return wave_obj # Возвращаем чтобы можно было использовать .wait_done() при вызове
 
 

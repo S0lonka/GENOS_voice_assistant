@@ -2,6 +2,7 @@ import os
 import struct
 import json
 import time
+import atexit
 
 # models
 from pvrecorder import PvRecorder
@@ -17,7 +18,9 @@ from app.config.notification import notification
 from app.config.config import *
 from app.config.play_sound import play
 
-def createFile_token_env() -> None:
+
+
+def createFile_token_env() -> bool:
     '''Создаёт  файл токеном, если его нет'''
 
     if not os.path.exists("app/env/token.env"):
@@ -25,20 +28,24 @@ def createFile_token_env() -> None:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
 
         notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+        return False
+    else:
+        return True
 
-        exit(0) # Завершает без ошибки
 
-
-def check_model_path(model_path: str) -> None:
+def check_model_path(model_path: str) -> bool:
     '''Проверяет путь до модели и уведомляет'''
     if not os.path.exists(model_path):
         notification("Check model path", f"Model not found, on the way: {model_path}")
-        exit(1)
+        return False
+    else:
+        return True
 
+def on_exit():
+    play("assistant_deactivate").wait_done()
+    print("Программа завершается!")
 
-# Инициализация модели Vosk и создание калди_регонайзера
-model = vosk.Model(MODEL_PATH)
-kaldi_reс = vosk.KaldiRecognizer(model, 16000)
+atexit.register(on_exit)
 
 # Основная функция ответа
 def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
@@ -71,12 +78,13 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
 
 def main():
     # devices = PvRecorder.get_available_devices()
-    
+
     porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[HELPERNAME_PATH])
     recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 
     recorder.start()
     print("- Я начал работу")
+    play("assistant_activate")
 
     # Заранее уведём время в меньшее(1000) чтобы несработал while
     ltc = time.time() - 1000
@@ -115,9 +123,7 @@ def main():
                 else:
                     print("- Прекращаю слушать")
                     play("assistant_stop_lisen", recorder)
-                    lisen_commands_flag = False 
-                    
-                    
+                    lisen_commands_flag = False      
                     
 
         except KeyboardInterrupt:
@@ -130,11 +136,15 @@ def main():
 if __name__ == "__main__":
     # Ловим все ошибки на стадии разработки
     try:
-        createFile_token_env()
-        check_model_path(MODEL_PATH)
-        
-        main()
-        
+        # Проверяем токен и путь до модели
+        if createFile_token_env() and check_model_path(MODEL_PATH):
+            # Инициализация модели Vosk и создание калди_регонайзера
+            model = vosk.Model(MODEL_PATH)
+            kaldi_reс = vosk.KaldiRecognizer(model, 16000)
+
+            main()
+        else:
+            exit(0)
 
     except Exception as e:
         print(e)
