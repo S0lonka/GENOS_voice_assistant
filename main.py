@@ -3,6 +3,7 @@ import struct
 import json
 import time
 import atexit
+import threading
 
 # models
 from pvrecorder import PvRecorder
@@ -12,12 +13,24 @@ import vosk
 # audio
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
 
-#project
-from app.config.notification import notification
+# project
 from app.config.config import *
+from app.config.notification import notification
 from app.config.play_sound import play
+from app.config.tray import create_tray
 
 
+
+
+
+
+# Переменная для управления иконкой
+tray_icon = None
+
+def run_icon(icon):
+    global tray_icon
+    tray_icon = icon
+    icon.run()
 
 def createFile_token_env() -> bool:
     '''Создаёт  файл токеном, если его нет'''
@@ -59,6 +72,10 @@ def check_model_path(model_path: str) -> bool:
 
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
+
+    if tray_icon:
+        tray_icon.stop() # Завершаем работу трея
+
     play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
@@ -161,6 +178,13 @@ if __name__ == "__main__":
             # Инициализация модели Vosk и создание калди_регонайзера
             model = vosk.Model(MODEL_PATH)
             kaldi_reс = vosk.KaldiRecognizer(model, 16000)
+
+            # Создаём и запускаем трей(В отдельном потоке)
+            icon = create_tray()
+            thread = threading.Thread(target=run_icon, args=(icon,))
+            thread.daemon = True
+            thread.start()
+
 
             main()
         else:
