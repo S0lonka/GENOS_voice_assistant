@@ -1,12 +1,14 @@
 from pystray import Icon, Menu, MenuItem
 from PIL import Image
+import sys
 
-def off_assistant(icon):
-    icon.stop()
+from app.config.flag import stop_event 
+
+# Глобальный флаг для выхода
+exit_flag = False
 
 
-
-def create_tray():
+def create_tray(stop_event_flag):
     '''Основной конструктор иконки трея'''
 
     icon_image = Image.open("app/icon/Genos_hand_whiteBackground_icon.jpg")
@@ -19,10 +21,19 @@ def create_tray():
 
         # Настройка пунктов меню
         menu = Menu(
-            MenuItem('Выйти', off_assistant)
+            MenuItem('Выйти', lambda icon, item: off_assistant(icon, item, stop_event_flag))
         )
     )
 
     return tray_icon
 
-tray_icon = create_tray().run()
+def run_icon(icon, flag_event):
+    icon.run()
+    flag_event.set()  # Сигнализируем, что трея завершился
+
+
+def off_assistant(icon, item, stop_event_flag):
+    print("Пользователь выбрал 'Выход'")
+    
+    icon.stop()
+    stop_event_flag.set()

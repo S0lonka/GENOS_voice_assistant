@@ -1,4 +1,5 @@
 import os
+import sys
 import struct
 import json
 import time
@@ -17,9 +18,9 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from app.config.config import *
 from app.config.notification import notification
 from app.config.play_sound import play
-from app.config.tray import create_tray
+from app.config.tray import create_tray, run_icon
 from app.config.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
-
+from app.config.flag import stop_event
 
 
 
@@ -27,17 +28,18 @@ from app.config.creates_and_checks import createFile_token_env, checkFile_token_
 # Переменная для управления иконкой
 tray_icon = None
 
-def run_icon(icon):
-    global tray_icon
-    tray_icon = icon
-    icon.run()
+# def run_icon(icon):
+#     global tray_icon
+#     tray_icon = icon
+#     icon.run()
 
 
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
 
-    if tray_icon:
-        tray_icon.stop() # Завершаем работу трея
+    # if tray_icon:
+    #     tray_icon.stop()
+    #     print("- Tray остановлен") # Завершаем работу трея
 
     play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
@@ -59,7 +61,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
             elif voice == "выключись":
                 print("Выключаюсь")
                 recorder.delete()
-                exit(0)
+                sys.exit(0)
 
             else:
                 return False
@@ -78,7 +80,7 @@ def main():
 
     porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[HELPERNAME_PATH])
     recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
-
+    
     recorder.start()
     print("- Я начал работу")
     play("assistant_activate")
@@ -87,7 +89,7 @@ def main():
     ltc = time.time() - 1000
     lisen_commands_flag = False # Флаг - что нас слушает бот
 
-    while True:
+    while not stop_event.is_set():
         try:
             pcm = recorder.read() # читаем аудио(в 0 и 1)
             pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
@@ -131,27 +133,29 @@ def main():
 
 
 if __name__ == "__main__":
-    # Ловим все ошибки на стадии разработки
     try:
         atexit.register(on_exit) # Добавляет звук при завершении программы
 
         # Проверяем токен и путь до модели
-
         if createFile_token_env() and checkFile_token_env() and checkModel_path(MODEL_PATH):
             # Инициализация модели Vosk и создание калди_регонайзера
             model = vosk.Model(MODEL_PATH)
             kaldi_reс = vosk.KaldiRecognizer(model, 16000)
 
+
+            # Для синхронизации между потоками
+            stop_event = threading.Event()
+
             # Создаём и запускаем трей(В отдельном потоке)
-            icon = create_tray()
-            thread = threading.Thread(target=run_icon, args=(icon,))
+            icon = create_tray(stop_event)
+
+            thread = threading.Thread(target=run_icon, args=(icon, stop_event))
             thread.daemon = True
             thread.start()
 
-
             main()
         else:
-            exit(0)
+            sys.exit(0)
 
     except Exception as e:
         print(e)
