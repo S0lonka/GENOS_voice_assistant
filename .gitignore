@@ -1,5 +1,8 @@
+# Файлы конфигурации пользователя
 env/
-.venv/
-__pycache__/
 
+
+.venv/
 test/
+*.log
+__pycache__/

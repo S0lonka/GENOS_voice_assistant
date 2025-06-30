@@ -5,6 +5,7 @@ import json
 import time
 import atexit
 import threading
+import logging as log
 
 # models
 from pvrecorder import PvRecorder
@@ -25,13 +26,11 @@ from app.config.flag import stop_event
 
 
 
-# Переменная для управления иконкой
-tray_icon = None
+log.basicConfig(level=log.INFO,
+                    filename="Genos_logs.log",
+                    filemode='w',
+                    format="%(asctime)s - %(levelname)s -/ %(message)s")
 
-# def run_icon(icon):
-#     global tray_icon
-#     tray_icon = icon
-#     icon.run()
 
 
 def on_exit():
@@ -138,6 +137,8 @@ if __name__ == "__main__":
 
         # Проверяем токен и путь до модели
         if createFile_token_env() and checkFile_token_env() and checkModel_path(MODEL_PATH):
+            log.info("Проверки пройдены (файл token_env, проверка содержания token_env, проверка модели)")
+
             # Инициализация модели Vosk и создание калди_регонайзера
             model = vosk.Model(MODEL_PATH)
             kaldi_reс = vosk.KaldiRecognizer(model, 16000)
@@ -155,6 +156,9 @@ if __name__ == "__main__":
 
             main()
         else:
+            log.warning(f"Проверки не пройдены: файл token_env: {createFile_token_env()},\n\
+                        проверка содержания token_env: {checkFile_token_env()},\n\
+                        проверка модели: {checkModel_path(MODEL_PATH)}")
             sys.exit(0)
 
     except Exception as e:
