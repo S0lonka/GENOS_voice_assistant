@@ -8,7 +8,7 @@ load_dotenv(TOKEN_ENV_PATH)
 LANG = "RU"
 
 '''Vosk model - vosk-model-small-ru-0.22'''
-MODEL_PATH = "app\\model"
-HELPERNAME_PATH = "app\\helpername\\genas_en_windows_v3_0_0.ppn"
+MODEL_PATH = "app\\assistant\\model"
+HELPERNAME_PATH = "app\\assistant\\assistant_name\\genas_en_windows_v3_0_0.ppn"
 
 PICOVOICE_TOKEN = os.getenv("PICOVOICE_TOKEN")
