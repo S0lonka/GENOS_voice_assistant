@@ -1,8 +1,7 @@
 from pystray import Icon, Menu, MenuItem
 from PIL import Image
-import sys
 
-from app.config.flag import stop_event 
+from app.config.tray_flag import stop_event 
 
 # Глобальный флаг для выхода
 exit_flag = False

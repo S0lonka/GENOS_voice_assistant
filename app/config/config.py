@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 
 TOKEN_ENV_PATH = "app\\env\\token.env"
+
 load_dotenv(TOKEN_ENV_PATH)
 
 LANG = "RU"

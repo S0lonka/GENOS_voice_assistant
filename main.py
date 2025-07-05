@@ -17,11 +17,11 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 # project
 from app.config.config import *
-from app.config.notification import notification
+# from app.config.notification import notification
 from app.config.play_sound import play
 from app.config.tray import create_tray, run_icon
 from app.config.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
-from app.config.flag import stop_event
+from app.config.tray_flag import stop_event
 
 
 
