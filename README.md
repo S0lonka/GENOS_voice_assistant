@@ -1,5 +1,6 @@
 # Genos - Voice Assistant
-
+---
+![poster](genos_poster.jpg)
 ---
 
 ## TODO:
