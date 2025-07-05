@@ -40,7 +40,7 @@ def on_exit():
     #     tray_icon.stop()
     #     print("- Tray остановлен") # Завершаем работу трея
 
-    play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
+    play("assistant_deactivate", LANG).wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
 
@@ -82,7 +82,7 @@ def main():
     
     recorder.start()
     print("- Я начал работу")
-    play("assistant_activate")
+    play("assistant_activate", LANG)
 
     # Заранее уведём время в меньшее(1000) чтобы несработал while
     ltc = time.time() - 1000
@@ -96,7 +96,7 @@ def main():
             if pcm_result >= 0: # если слышит ключевое слово
                 
                 print("- Я тебя слушаю")
-                play("assistant_start_lisen", recorder)
+                play("assistant_start_lisen", LANG, recorder)
                 kaldi_reс.Reset() 
     
                 ltc = time.time()# обновляем время
@@ -120,7 +120,7 @@ def main():
                         break
                 else:
                     print("- Прекращаю слушать")
-                    play("assistant_stop_lisen", recorder)
+                    play("assistant_stop_lisen", LANG, recorder)
                     lisen_commands_flag = False      
                     
 

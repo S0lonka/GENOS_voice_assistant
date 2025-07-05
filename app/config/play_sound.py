@@ -3,7 +3,7 @@ import simpleaudio
 from pvrecorder import PvRecorder
 from typing import Optional
 
-def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
+def play(sound_name: str, lang: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
     '''Функция проигрывает звук по нужному пути,
     сразу заботясь о остановке и запуске записи
     
@@ -13,9 +13,19 @@ def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.
     '''
     if recorder:
         recorder.stop()
+    
 
-    sound_path = f"app/sounds/{sound_name}.wav"
+    # Список общих звуков(для всех языков)
+    general_sounds = ["assistant_activate", "assistant_deactivate", "assistant_in_process", "assistant_start_lisen", "assistant_stop_lisen"]
+
+    # Проверяем если звук в общей папке
+    if sound_name in general_sounds:
+        sound_path = f"app/sounds/general/{sound_name}.wav"
+    else:
+        sound_path = f"app/sounds/{lang}/{sound_name}.wav"
+
     wave_obj = sa.WaveObject.from_wave_file(sound_path).play()
+
 
     if recorder:
         recorder.start()
