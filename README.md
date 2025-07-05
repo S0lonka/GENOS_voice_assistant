@@ -1,4 +1,4 @@
-# Genos Voice Assistant
+# Genos - Voice Assistant
 
 ---
 

@@ -47,7 +47,7 @@ def on_exit():
 
 
 #! Основная функция ответа
-def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
+def voice_assistant_responce(voice: str, recorder: PvRecorder) -> bool:
     # TODO: add Опредление команды - иначе ответ нейросети
     try:
         recorder.stop() # остановим запись во время обработки
@@ -78,7 +78,7 @@ def voice_helper_responce(voice: str, recorder: PvRecorder) -> bool:
 def main():
     # devices = PvRecorder.get_available_devices()
 
-    porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[HELPERNAME_PATH])
+    porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[ASSISTANT_NAME_PATH])
     recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
     
     recorder.start()
@@ -113,7 +113,7 @@ def main():
                     audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
 
                     if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
-                        if voice_helper_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
+                        if voice_assistant_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
                             ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
 
                         kaldi_reс.Reset() 
