@@ -15,14 +15,15 @@ import vosk
 # audio
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
 
-# project
+# Configs
 from app.config.config import *
-# from app.config.notification import notification
-from app.config.play_sound import play
-from app.config.tray import create_tray, run_icon
-from app.config.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
 from app.config.tray_flag import stop_event
 
+#Commands
+# from app.commands.notification import notification
+from app.commands.play_sound import play
+from app.commands.tray import create_tray, run_icon
+from app.commands.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
 
 
 
