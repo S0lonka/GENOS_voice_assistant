@@ -7,13 +7,12 @@ from app.config.numbers_word_ru import number_words
 #audio
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
 
-'''
-Функциям с аргументами использоват
-'''
+
 # Приветствие
 def hello():
     play("hello_brother_ru", "RU").wait_done()
     print("Привет брат, я тебя слушаю")
+
 
 # Выключение Genos
 def off_va():
@@ -21,8 +20,10 @@ def off_va():
     print("Выключаюсь")
     sys.exit(0)
 
+
+
 # Установить звук
-def set_volume(voice, process_name):
+def set_volume(voice, process_names):
     print("Вошёл в функцию")
     for key, value in number_words.items():
         if key in voice:

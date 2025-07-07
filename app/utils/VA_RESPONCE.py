@@ -7,7 +7,15 @@ from typing import Union, Tuple, Optional
 
 from app.utils.commands.standard_commands import *
 
+def get_yaml_path(file_name):
+    # Путь до файла с командами
+    current_dir = os.path.dirname(__file__)  
+    yaml_path = os.path.join(current_dir, "..", "commands_text", file_name)
+    yaml_path = os.path.normpath(yaml_path)
+    return yaml_path
+
     
+
 def check_command(voice: str) -> Tuple[bool, str | None, list[str] | None]:
     ''' Функция обрабатывает команду, путём поиска ключевого слова для вызова команды
     из файла commands.yaml
@@ -20,31 +28,28 @@ def check_command(voice: str) -> Tuple[bool, str | None, list[str] | None]:
         result: название функции - если найдена
         args: доп аргументы аргументы - если есть
     '''
+    yaml_path = get_yaml_path("commands.yaml")
 
-    # Путь до команд
-    current_dir = os.path.dirname(__file__)  
-    yaml_path = os.path.join(current_dir, "..", "commands_text", "commands.yaml")
-    yaml_path = os.path.normpath(yaml_path)
 
     # Парсим yaml
     with open(yaml_path, "r", encoding="UTF-8") as file:
         file = yaml.safe_load(file)
 
-        voice_list = voice.split() # Переведём наш текст в последовательность слов
+        # voice_list = voice.split() # Переведём наш текст в последовательность слов
 
-        for voice_list_word in voice_list:  # Проверяем каждое слово(из сказанного), команда ли оно?
-            for command in file:            # Проходимся по командам(функции)
-                for key in file[command]:     # Проходимся по словам вызывающих команды
+        # for voice_list_word in voice_list:  # Проверяем каждое слово(из сказанного), команда ли оно?
+        for command in file:            # Проходимся по командам(функции)
+            for key in file[command]:     # Проходимся по словам вызывающих команды
 
-                    if isinstance(key, dict):      # Специальная обработка команд с аргументами
-                        key_word = next(iter(key)) # Берём ключевое слово - здесь key словарь 
+                if isinstance(key, dict):      # Специальная обработка команд с аргументами
+                    key_word = next(iter(key)) # Берём ключевое слово - здесь key словарь 
                         
-                        if key_word == voice_list_word:
-                            args = key[key_word]
-                            return True, command, args # Команда с аргументами
-                    else:
-                        if key == voice_list_word: # Сравниванием команду со сказанным словом
-                            return True, command, None # Команда без аргументов
+                    if key_word in voice:
+                        args = key[key_word]
+                        return True, command, args # Команда с аргументами
+                else:
+                    if key in voice: # Сравниванием команду со сказанным словом
+                        return True, command, None # Команда без аргументов
 
         else:
             return False, None, None # Команда не найдена
