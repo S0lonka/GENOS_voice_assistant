@@ -20,17 +20,18 @@ from app.config.config import *
 from app.config.tray_flag import stop_event
 
 #Commands
-# from app.commands.notification import notification
-from app.commands.play_sound import play
-from app.commands.tray import create_tray, run_icon
-from app.commands.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
+from app.utils.VA_RESPONCE import voice_assistant_responce
+# from app.utils.notification import notification
+from app.utils.play_sound import play
+from app.utils.tray import create_tray, run_icon
+from app.utils.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
 
 
 
 log.basicConfig(level=log.INFO,
-                    filename="Genos_logs.log",
-                    filemode='w',
-                    format="%(asctime)s - %(levelname)s -/ %(message)s")
+                filename="Genos_logs.log",
+                filemode='w',
+                format="%(asctime)s - %(levelname)s -/ %(message)s")
 
 
 
@@ -44,34 +45,6 @@ def on_exit():
     play("assistant_deactivate", LANG).wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
-
-
-#! Основная функция ответа
-def voice_assistant_responce(voice: str, recorder: PvRecorder) -> bool:
-    # TODO: add Опредление команды - иначе ответ нейросети
-    try:
-        recorder.stop() # остановим запись во время обработки
-        if voice != "": # Только если не тишина, иначе вернём false
-            print(f"\n- Распознано: {voice}")
-
-            if voice == "привет":
-                print("Привет я на связи")
-                return True
-
-            elif voice == "выключись":
-                print("Выключаюсь")
-                recorder.delete()
-                sys.exit(0)
-
-            else:
-                return False
-
-        else:
-            print("Ничего не распознано")
-            return False
-            
-    finally:
-        kaldi_reс.Reset() #? очистка
 
 
 
@@ -113,7 +86,7 @@ def main():
                     audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
 
                     if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
-                        if voice_assistant_responce(json.loads(kaldi_reс.Result())["text"], recorder): # Возвращает True если было задействованно ключевое слово
+                        if voice_assistant_responce(json.loads(kaldi_reс.Result())["text"], recorder, kaldi_reс): # Возвращает True если было задействованно ключевое слово
                             ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
 
                         kaldi_reс.Reset() 
@@ -126,6 +99,7 @@ def main():
                     
 
         except KeyboardInterrupt:
+            log.error("Ошибка остановки.")
             print("Error stop...")
             recorder.stop()
             recorder.delete()

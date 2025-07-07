@@ -9,6 +9,7 @@ def play(sound_name: str, lang: str, recorder: Optional[PvRecorder] = None) -> s
     
     Args:
         sound_name: имя звукового файла (без расширения)
+        lang: язык на котором говорит Genos
         recorder: опциональный аргумент, передаётся только если нужно останавливать и запускать запись
     '''
     if recorder:
