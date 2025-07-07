@@ -12,6 +12,7 @@ def play(sound_name: str, lang: str, recorder: Optional[PvRecorder] = None) -> s
         lang: язык на котором говорит Genos
         recorder: опциональный аргумент, передаётся только если нужно останавливать и запускать запись
     '''
+    
     if recorder:
         recorder.stop()
     

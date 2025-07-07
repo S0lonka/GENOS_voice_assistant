@@ -8,7 +8,19 @@ from typing import Union, Tuple, Optional
 from app.utils.commands.standard_commands import *
 
     
-def check_command(voice: str) -> Tuple[bool, str | None] :
+def check_command(voice: str) -> Tuple[bool, str | None, list[str] | None]:
+    ''' Функция обрабатывает команду, путём поиска ключевого слова для вызова команды
+    из файла commands.yaml
+
+    Args:
+        voice: Распознаный текст без изменений
+
+    Return:
+        found_command: найдена ли команда
+        result: название функции - если найдена
+        args: доп аргументы аргументы - если есть
+    '''
+
     # Путь до команд
     current_dir = os.path.dirname(__file__)  
     yaml_path = os.path.join(current_dir, "..", "commands_text", "commands.yaml")
@@ -18,14 +30,26 @@ def check_command(voice: str) -> Tuple[bool, str | None] :
     with open(yaml_path, "r", encoding="UTF-8") as file:
         file = yaml.safe_load(file)
 
-        for command in file:    # Проходимся по командам
-            for key_word in file[command]:    # Проходимся по словам вызывающих команды
-                if key_word == voice:
-                    return True, command
+        voice_list = voice.split() # Переведём наш текст в последовательность слов
+
+        for voice_list_word in voice_list:  # Проверяем каждое слово(из сказанного), команда ли оно?
+            for command in file:            # Проходимся по командам(функции)
+                for key in file[command]:     # Проходимся по словам вызывающих команды
+
+                    if isinstance(key, dict):      # Специальная обработка команд с аргументами
+                        key_word = next(iter(key)) # Берём ключевое слово - здесь key словарь 
+                        
+                        if key_word == voice_list_word:
+                            args = key[key_word]
+                            return True, command, args # Команда с аргументами
+                    else:
+                        if key == voice_list_word: # Сравниванием команду со сказанным словом
+                            return True, command, None # Команда без аргументов
 
         else:
-            return False, None # команда не найдена
+            return False, None, None # Команда не найдена
         
+
 
 #! Основная функция ответа
 def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.KaldiRecognizer) -> bool:
@@ -34,15 +58,21 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
         if voice != "": # Только если не тишина, иначе вернём false
             print(f"\n- Распознано: {voice}")
             
-            flag, result = check_command(voice) # Вернёт False если не наёдёт команду
+            found_command, result, args = check_command(voice) # Вернёт flag = False если не найдёт команду
 
-            if flag:
+            if found_command:
                 # Проверяем что такая функция существует И что её можно запустить
                 if result in globals() and callable(globals()[result]):
-                    print(f"Команда {result} выполнена")
-                    globals()[result]()
+                    print(f"- Команда {result} выполнена")
+                    
+                    if args: # Проверка вызова функции с аргументами и без
+                        globals()[result](voice, args) # Передадим voice для лишних обработок
+                    else:
+                        globals()[result]()
+
                     return True
                 
+
                 else:
                     print("Команду не получилось выполнить")
                     return False
@@ -55,46 +85,4 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
     finally:
         kaldi_reс.Reset() #? очистка
 
-
-
-
-
- 
-    
-            # if voice == "привет":
-            #     print("Привет я на связи")
-            #     return True
-
-            # elif voice == "выключись":
-            #     print("Выключаюсь")
-            #     recorder.delete()
-            #     sys.exit(0)
-
-
-
-
-# def off_va():
-#     print("Выключаюсь")
-
-# def check_yaml(voice):    
-#     current_dir = os.path.dirname(__file__)  
-#     yaml_path = os.path.join(current_dir, "..", "commands_text", "commands.yaml")
-#     yaml_path = os.path.normpath(yaml_path)
-
-#     with open(yaml_path, "r", encoding="UTF-8") as file:
-#         file = yaml.safe_load(file)
-
-#         for command in file:
-#             for key_word in file[command]:
-#                 if key_word == voice:
-#                     return command
-                
-#         else:
-#             print("no")
-                
-# voice = "выключись"
-# result = check_yaml(voice)
-# print(result)
-# if result in globals() and callable(globals()[result]):
-#     globals()[result]()
 
