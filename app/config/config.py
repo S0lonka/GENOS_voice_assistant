@@ -2,13 +2,19 @@ from dotenv import load_dotenv
 import os
 
 TOKEN_ENV_PATH = "app\\env\\token.env"
+SETTINGS_ENV_PATH = "app\\env\\settings.env"
 
-load_dotenv(TOKEN_ENV_PATH)
+if load_dotenv(SETTINGS_ENV_PATH):
+    LANG = os.getenv("LANG")
 
-LANG = "RU"
+    '''Vosk model - vosk-model-small-ru-0.22'''
+    MODEL_PATH = os.getenv("MODEL_PATH")
+    ASSISTANT_NAME_PATH = os.getenv("ASSISTANT_NAME_PATH")
 
-'''Vosk model - vosk-model-small-ru-0.22'''
-MODEL_PATH = "app\\assistant\\model"
-ASSISTANT_NAME_PATH = "app\\assistant\\assistant_name\\genas_en_windows_v3_0_0.ppn"
+else: # Аннотация типов ругается что значения не могут быть None, поэтому нужно их заполнить принудительно
+    LANG = ""
+    MODEL_PATH = ""
+    ASSISTANT_NAME_PATH = ""
 
-PICOVOICE_TOKEN = os.getenv("PICOVOICE_TOKEN")
+if load_dotenv(TOKEN_ENV_PATH):
+    PICOVOICE_TOKEN = os.getenv("PICOVOICE_TOKEN")

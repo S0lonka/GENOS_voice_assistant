@@ -39,10 +39,15 @@ def off_va():
 
 # Установить звук
 def set_volume(voice):
+    volume=0
+    process_name=""
+    
     # ищем числовое значение в запросе
     for key, value in number_words.items(): 
         if key in voice:
             volume = float(value)
+
+
 
     yaml_path = get_yaml_path("process_names.yaml")
     # Парсим yaml
@@ -54,29 +59,24 @@ def set_volume(voice):
                 if key_word in voice:   
                     process_name = app_name 
         
-        # for item in file:
-        #     for app_name, key_words in file[item]:
-        #         for key_word in key_words:
-        #             if key_word in voice:
-        #                 process_name = app_name 
+    if volume and process_name: # Проверим что переменные не пусты
+        volume *= 0.01   # переводим в сотые доли
+    
+        if 0.0 <= volume and volume <= 1.0:     # Проверка что запрос в реальном диапозоне
+            # Получаем список всех аудиосессий
+            sessions = AudioUtilities.GetAllSessions()
 
-    # process_name = "Яндекс Музыка"
+            for session in sessions:
+                if session.Process and session.Process.name() == f"{process_name}.exe":
+                    # Получаем интерфейс управления громкостью для этого процесса
+                    volume_interface = session._ctl.QueryInterface(ISimpleAudioVolume)
+                    volume_interface.SetMasterVolume(float(volume), None)
+                    print(f"Громкость для {process_name} установлена на {volume}")
+                    break
 
-    volume *= 0.01   # переводим в сотые доли
-
-    if 0.0 <= volume and volume <= 1.0:     # Проверка что запрос в реальном диапозоне
-        # Получаем список всех аудиосессий
-        sessions = AudioUtilities.GetAllSessions()
-
-        for session in sessions:
-            if session.Process and session.Process.name() == f"{process_name}.exe":
-                # Получаем интерфейс управления громкостью для этого процесса
-                volume_interface = session._ctl.QueryInterface(ISimpleAudioVolume)
-                volume_interface.SetMasterVolume(float(volume), None)
-                print(f"Громкость для {process_name} установлена на {volume}")
-                break
-
+            else:
+                print(f"Процесс {process_name} не найден в аудиосессиях")
         else:
-            print(f"Процесс {process_name} не найден в аудиосессиях")
+            print("Не верный диапозон")
     else:
-        print("Не верный диапозон")
+        print("Не найдена громкость или процесс(приложение)")

@@ -13,7 +13,7 @@ import pvporcupine
 import vosk
 
 # audio
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
+# from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  
 
 # Configs
 from app.config.config import *
@@ -58,13 +58,13 @@ def main():
     print("- Я начал работу")
     play("assistant_activate", LANG)
 
-    # Заранее уведём время в меньшее(1000) чтобы несработал while
-    ltc = time.time() - 1000
+    
+    ltc = time.time() - 1000    # Заранее уведём время в меньшее(1000) чтобы несработал while
     lisen_commands_flag = False # Флаг - что нас слушает бот
 
     while not stop_event.is_set():
         try:
-            pcm = recorder.read() # читаем аудио(в 0 и 1)
+            pcm = recorder.read()               # читаем аудио(в 0 и 1)
             pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
             
             if pcm_result >= 0: # если слышит ключевое слово
@@ -80,14 +80,14 @@ def main():
 
             while lisen_commands_flag:
                 if time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
-                    pcm = recorder.read() # читаем аудио(в 0 и 1)
+                    pcm = recorder.read()   # читаем аудио(в 0 и 1)
 
                     audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
                     audio_data = struct.pack("%dh" % len(pcm), *pcm) # преобразование в байты
 
-                    if kaldi_reс.AcceptWaveform(audio_data): # Если распознано возвращает 1
+                    if kaldi_reс.AcceptWaveform(audio_data):    # Если распознано возвращает 1
                         if voice_assistant_responce(json.loads(kaldi_reс.Result())["text"], recorder, kaldi_reс): # Возвращает True если было задействованно ключевое слово
-                            ltc = time.time() # Программа выполнилась и мы снова готовы ждать 10 сек
+                            ltc = time.time()   # Программа выполнилась и мы снова готовы ждать 10 сек
 
                         kaldi_reс.Reset() 
                         recorder.start()
@@ -130,6 +130,8 @@ if __name__ == "__main__":
             thread.start()
 
             main()
+
+
         else:
             log.warning(f"Проверки не пройдены: файл token_env: {createFile_token_env()},\n\
                         проверка содержания token_env: {checkFile_token_env()},\n\

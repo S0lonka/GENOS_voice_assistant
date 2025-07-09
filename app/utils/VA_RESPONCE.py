@@ -64,7 +64,7 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
                     sig = inspect.signature(handler)
                     parameters = sig.parameters
 
-                    if "voice" in parameters:
+                    if "voice" in parameters: # Проверка функций которым нужен параметр - voice
                         handler(voice)
                     else:
                         handler()

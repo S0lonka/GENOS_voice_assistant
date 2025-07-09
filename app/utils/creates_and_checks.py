@@ -3,16 +3,24 @@ from app.utils.notification import notification
 
 
 def createFile_token_env() -> bool:
-    '''Создаёт  файл токеном, если его нет'''
+    '''Создаёт  файл токеном/настройками, если его нет'''
 
     if not os.path.exists(TOKEN_ENV_PATH):
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
         with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
-            notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
-
+            notification(f"First launch", "the token.env file was created, at {TOKEN_ENV_PATH}") # Уведомляет пользователя о создании файла
         return False
+    
+    elif not os.path.exists(SETTINGS_ENV_PATH):
+        os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
+
+        with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
+            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+            notification(f"First launch", "the token.env file was created, at {SETTINGS_ENV_PATH}")
+        return False
+    
     else:
         return True
 
