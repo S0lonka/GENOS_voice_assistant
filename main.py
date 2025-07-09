@@ -6,6 +6,7 @@ import time
 import atexit
 import threading
 import logging as log
+import asyncio
 
 # models
 from pvrecorder import PvRecorder
@@ -46,9 +47,23 @@ def on_exit():
     print("Программа завершается!")
 
 
+async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
+    pcm = recorder.read()               # читаем аудио(в 0 и 1)
+    pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
+            
+    if pcm_result >= 0: # если слышит ключевое слово
+                
+        print("- Я тебя слушаю")
+        play("assistant_start_lisen", LANG, recorder)
+        kaldi_reс.Reset()
+
+        ltc = time.time()# обновляем время
+        lisen_commands_flag = True
+
+    return ltc, lisen_commands_flag
 
 
-def main():
+async def main():
     # devices = PvRecorder.get_available_devices()
 
     porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[ASSISTANT_NAME_PATH])
@@ -64,18 +79,7 @@ def main():
 
     while not stop_event.is_set():
         try:
-            pcm = recorder.read()               # читаем аудио(в 0 и 1)
-            pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
-            
-            if pcm_result >= 0: # если слышит ключевое слово
-                
-                print("- Я тебя слушаю")
-                play("assistant_start_lisen", LANG, recorder)
-                kaldi_reс.Reset() 
-    
-                ltc = time.time()# обновляем время
-                lisen_commands_flag = True
-
+            ltc, lisen_commands_flag = await lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag)
 
 
             while lisen_commands_flag:
@@ -92,6 +96,10 @@ def main():
                         kaldi_reс.Reset() 
                         recorder.start()
                         break
+                    
+                    # Если мы уже в основном цикле, но сново звучит генос, то обновляем его
+                    ltc, lisen_commands_flag = await lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag) 
+
                 else:
                     print("- Прекращаю слушать")
                     play("assistant_stop_lisen", LANG, recorder)
@@ -129,7 +137,7 @@ if __name__ == "__main__":
             thread.daemon = True
             thread.start()
 
-            main()
+            asyncio.run(main())
 
 
         else:

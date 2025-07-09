@@ -6,3 +6,5 @@ env/
 test/
 *.log
 __pycache__/
+
+to_do.txt

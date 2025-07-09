@@ -41,7 +41,7 @@ def off_va():
 def set_volume(voice):
     volume=0
     process_name=""
-    
+
     # ищем числовое значение в запросе
     for key, value in number_words.items(): 
         if key in voice:
@@ -80,3 +80,7 @@ def set_volume(voice):
             print("Не верный диапозон")
     else:
         print("Не найдена громкость или процесс(приложение)")
+
+
+def genos():
+    print("Да, я тут, я уже слушаю")
