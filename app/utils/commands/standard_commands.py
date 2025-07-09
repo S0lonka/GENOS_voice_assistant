@@ -1,4 +1,8 @@
 import sys
+import os
+import yaml
+
+# utils
 from app.utils.play_sound import play
 
 #config
@@ -6,6 +10,18 @@ from app.config.numbers_word_ru import number_words
 
 #audio
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
+
+
+
+
+def get_yaml_path(file_name):
+    # Путь до файла с командами
+    current_dir = os.path.dirname(__file__)  
+    yaml_path = os.path.join(current_dir, "..", "..", "commands_text", file_name)
+    yaml_path = os.path.normpath(yaml_path)
+    return yaml_path
+
+
 
 
 # Приветствие
@@ -21,17 +37,31 @@ def off_va():
     sys.exit(0)
 
 
-
 # Установить звук
-def set_volume(voice, process_names):
-    print("Вошёл в функцию")
-    for key, value in number_words.items():
+def set_volume(voice):
+    # ищем числовое значение в запросе
+    for key, value in number_words.items(): 
         if key in voice:
             volume = float(value)
 
+    yaml_path = get_yaml_path("process_names.yaml")
+    # Парсим yaml
+    with open(yaml_path, "r", encoding="UTF-8") as file:
+        file = yaml.safe_load(file)
 
-    process_name = "Яндекс Музыка"
-   # Получаем число из слова по словарю number_words(как и в проверке выше)
+        for app_name in file:                # Проходимся по командам(функции)
+            for key_word in file[app_name]:  # Проходимся по словам вызывающих команды
+                if key_word in voice:   
+                    process_name = app_name 
+        
+        # for item in file:
+        #     for app_name, key_words in file[item]:
+        #         for key_word in key_words:
+        #             if key_word in voice:
+        #                 process_name = app_name 
+
+    # process_name = "Яндекс Музыка"
+
     volume *= 0.01   # переводим в сотые доли
 
     if 0.0 <= volume and volume <= 1.0:     # Проверка что запрос в реальном диапозоне
