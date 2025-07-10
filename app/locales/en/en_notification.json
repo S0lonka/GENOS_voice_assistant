@@ -1,0 +1,25 @@
+{
+    "info":
+    {
+        "First launch":{
+            "title" : "Token env created",
+            "msg"   : "The token.env file was created, at app/env/token.env"
+        },
+        "Settings env created":{
+            "title" : "Settings env created",
+            "msg"   : "The token.env file was created, at app/env/token.env"
+        }
+    },
+
+    "warning":
+    {
+        "not_found_picovoice_token":{
+            "title" : "Not found PICOVOICE_TOKEN",
+            "msg"   : "Please fill in the field with the token on the path app/env/token.env" 
+        },
+        "Not found model":{
+            "title" : "Not found model",
+            "msg"   : "Model not found, on the way: {model_path}"
+        }
+    }
+}

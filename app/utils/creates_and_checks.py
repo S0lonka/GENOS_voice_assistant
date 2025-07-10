@@ -13,7 +13,7 @@ def createFile_token_env() -> bool:
             (
                 "PICOVOICE_TOKEN=<токен_picovoice>"
             )
-            notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+            notification("Token env created", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
         return False
     
     elif not os.path.exists(SETTINGS_ENV_PATH):
@@ -27,7 +27,7 @@ def createFile_token_env() -> bool:
                 "DEVICE_INDEX=-1" "            # -1 для текущего устройства"                            "\n"
                 "WAITING_WHILE_LISTENING=15" " # Время которое будет слушать бот после своего имени"
             )
-            notification("First launch", "the token.env file was created, at app/env/settings.env")
+            notification("Settings env created", "the token.env file was created, at app/env/settings.env")
         return False
     
     else:
@@ -52,7 +52,7 @@ def checkFile_token_env() -> bool:
 def checkModel_path(model_path: str) -> bool:
     '''Проверяет путь до модели и уведомляет'''
     if not os.path.exists(model_path):
-        notification("Check model path", f"Model not found, on the way: {model_path}")
+        notification("Not found model", f"Model not found, on the way: {model_path}")
         return False
     else:
         return True
