@@ -13,7 +13,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
 
 
 
-
+#! ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 def get_yaml_path(file_name):
     # Путь до файла с командами
     current_dir = os.path.dirname(__file__)  
@@ -21,6 +21,15 @@ def get_yaml_path(file_name):
     yaml_path = os.path.normpath(yaml_path)
     return yaml_path
 
+
+
+
+#! ОСНОВНЫЕ ФУНКИИ
+#* ВТОРОСТЕПЕННЫЕ ФУНКЦИИ
+
+# Повтор ключевого слова
+def genos():
+    print("Да, я тут, я уже слушаю")
 
 
 
@@ -39,7 +48,8 @@ def off_va():
 
 
 
-# Установить звук
+#* ФУНКЦИИ ДЛЯ ЗВУКА
+# Установить звук(Процесса или общий)
 def set_volume(voice):
     # Изначально зададим значения чтобы избежать None
     volume=0 
@@ -79,7 +89,8 @@ def set_volume(voice):
                     break
 
             else:
-                print(f"Процесс {process_name} не найден в аудиосессиях")
+                print(f"Процесс {process_name} не найден в аудиосессиях, ставлю общий звук")
+
         else:
             print("Не верный диапозон")
     else:
@@ -87,5 +98,10 @@ def set_volume(voice):
 
 
 
-def genos():
-    print("Да, я тут, я уже слушаю")
+
+
+
+#* ФУНКЦИИ ДЛЯ ПРИЛОЖЕНИЙ
+
+
+#* ФУНКЦИИ ДЛЯ БРАУЗЕРА
