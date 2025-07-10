@@ -47,6 +47,8 @@ def on_exit():
     print("Программа завершается!")
 
 
+
+
 async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
     pcm = recorder.read()               # читаем аудио(в 0 и 1)
     pcm_result = porcupine.process(pcm) # возвращает 0 если слышит ключевое слово
@@ -61,6 +63,7 @@ async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
         lisen_commands_flag = True
 
     return ltc, lisen_commands_flag
+
 
 
 async def main():

@@ -30,6 +30,7 @@ def hello():
     print("Привет брат, я тебя слушаю")
 
 
+
 # Выключение Genos
 def off_va():
     play("ok_goodbye_bro_ru", "RU").wait_done()
@@ -37,9 +38,11 @@ def off_va():
     sys.exit(0)
 
 
+
 # Установить звук
 def set_volume(voice):
-    volume=0
+    # Изначально зададим значения чтобы избежать None
+    volume=0 
     process_name=""
 
     # ищем числовое значение в запросе
@@ -59,6 +62,7 @@ def set_volume(voice):
                 if key_word in voice:   
                     process_name = app_name 
         
+
     if volume and process_name: # Проверим что переменные не пусты
         volume *= 0.01   # переводим в сотые доли
     
@@ -80,6 +84,7 @@ def set_volume(voice):
             print("Не верный диапозон")
     else:
         print("Не найдена громкость или процесс(приложение)")
+
 
 
 def genos():
