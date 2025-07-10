@@ -69,7 +69,6 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
                     else:
                         handler()
 
-                    # globals()[result](voice)
 
                     return True
                 

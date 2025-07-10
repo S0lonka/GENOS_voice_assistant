@@ -70,7 +70,7 @@ async def main():
     # devices = PvRecorder.get_available_devices()
 
     porcupine = pvporcupine.create(access_key=PICOVOICE_TOKEN, keyword_paths=[ASSISTANT_NAME_PATH])
-    recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
+    recorder = PvRecorder(device_index=int(DEVICE_INDEX), frame_length=porcupine.frame_length)
     
     recorder.start()
     print("- Я начал работу")
