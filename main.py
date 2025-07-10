@@ -141,6 +141,7 @@ if __name__ == "__main__":
 
 
         else:
+            print("Проверки не пройдены")
             log.warning(f"Проверки не пройдены: файл token_env: {createFile_token_env()},\n\
                         проверка содержания token_env: {checkFile_token_env()},\n\
                         проверка модели: {checkModel_path(MODEL_PATH)}")

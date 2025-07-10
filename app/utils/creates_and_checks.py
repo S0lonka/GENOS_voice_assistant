@@ -10,15 +10,17 @@ def createFile_token_env() -> bool:
 
         with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
             file.write("PICOVOICE_TOKEN=<токен_picovoice>")
-            notification(f"First launch", "the token.env file was created, at {TOKEN_ENV_PATH}") # Уведомляет пользователя о создании файла
+            notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
         return False
     
     elif not os.path.exists(SETTINGS_ENV_PATH):
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
-        with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
-            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
-            notification(f"First launch", "the token.env file was created, at {SETTINGS_ENV_PATH}")
+        with open(SETTINGS_ENV_PATH, 'w', encoding="UTF-8") as file:
+            file.write( "LANG=RU\n"
+                        "MODEL_PATH=app\\assistant\\model\n"
+                        "ASSISTANT_NAME_PATH=app\\assistant\\assistant_name\\genas_en_windows_v3_0_0.ppn")
+            notification("First launch", "the token.env file was created, at app/env/settings.env")
         return False
     
     else:
@@ -31,7 +33,7 @@ def checkFile_token_env() -> bool:
         token_env_text = file.read()
 
         # Проверям чтобы был введён токен
-        if token_env_text in ["PICOVOICE_TOKEN=<токен_picovoice>", ""]:
+        if token_env_text in ["PICOVOICE_TOKEN=<токен_picovoice>", "PICOVOICE_TOKEN","PICOVOICE_TOKEN=" , ""]:
             notification("Not found PICOVOICE_TOKEN", "Please fill in the field with the token on the path app/env/token.env")
             return False
         else:
