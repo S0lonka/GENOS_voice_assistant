@@ -10,7 +10,7 @@ if load_dotenv(SETTINGS_ENV_PATH):
     '''Vosk model - vosk-model-small-ru-0.22'''
     MODEL_PATH = os.getenv("MODEL_PATH")
     ASSISTANT_NAME_PATH = os.getenv("ASSISTANT_NAME_PATH")
-    DEVICE_INDEX= os.getenv("DEVICE_INDEX")
+    DEVICE_INDEX = os.getenv("DEVICE_INDEX")
 
 
 else: # Аннотация типов ругается что значения не могут быть None, поэтому нужно их заполнить принудительно

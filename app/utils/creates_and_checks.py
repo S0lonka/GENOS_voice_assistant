@@ -9,7 +9,10 @@ def createFile_token_env() -> bool:
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
         with open(TOKEN_ENV_PATH, 'w', encoding="UTF-8") as file:
-            file.write("PICOVOICE_TOKEN=<токен_picovoice>")
+            file.write
+            (
+                "PICOVOICE_TOKEN=<токен_picovoice>"
+            )
             notification("First launch", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
         return False
     
@@ -17,9 +20,13 @@ def createFile_token_env() -> bool:
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
         with open(SETTINGS_ENV_PATH, 'w', encoding="UTF-8") as file:
-            file.write(  "LANG=RU\n"
-                        r"MODEL_PATH=app\assistant\model" "\n"
-                        r"ASSISTANT_NAME_PATH=app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn")
+            file.write
+            (  
+                "LANG=RU\n"
+                r"MODEL_PATH=app\assistant\model" "\n"
+                r"ASSISTANT_NAME_PATH=app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn" "\n"
+                "DEVICE_INDEX=-1"
+            )
             notification("First launch", "the token.env file was created, at app/env/settings.env")
         return False
     
