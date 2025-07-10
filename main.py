@@ -39,10 +39,6 @@ log.basicConfig(level=log.INFO,
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
 
-    # if tray_icon:
-    #     tray_icon.stop()
-    #     print("- Tray остановлен") # Завершаем работу трея
-
     play("assistant_deactivate", LANG).wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
@@ -84,9 +80,8 @@ async def main():
         try:
             ltc, lisen_commands_flag = await lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag)
 
-
             while lisen_commands_flag:
-                if time.time() - ltc <= 10: # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
+                if time.time() - ltc <= WAITING_WHILE_LISTENING: # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
                     pcm = recorder.read()   # читаем аудио(в 0 и 1)
 
                     audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
