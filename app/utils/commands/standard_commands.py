@@ -47,14 +47,14 @@ def genos():
 
 # Приветствие
 def hello():
-    play("hello_brother_ru", "RU").wait_done()
+    play("hello_brother_ru").wait_done()
     print("Привет брат, я тебя слушаю")
 
 
 
 # Выключение Genos
 def off_va():
-    play("ok_goodbye_bro_ru", "RU").wait_done()
+    play("ok_goodbye_bro_ru").wait_done()
     print("Выключаюсь")
     sys.exit(0)
 

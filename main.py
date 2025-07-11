@@ -39,7 +39,7 @@ log.basicConfig(level=log.INFO,
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
 
-    play("assistant_deactivate", APP_LANG).wait_done() # Ожидаем завершения звука и после завершаем код
+    play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
 
@@ -52,7 +52,7 @@ async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
     if pcm_result >= 0: # если слышит ключевое слово
                 
         print("- Я тебя слушаю")
-        play("assistant_start_lisen", APP_LANG, recorder)
+        play("assistant_start_lisen", recorder)
         kaldi_reс.Reset()
 
         ltc = time.time()# обновляем время
@@ -100,7 +100,7 @@ async def main():
 
                 else:
                     print("- Прекращаю слушать")
-                    play("assistant_stop_lisen", APP_LANG, recorder)
+                    play("assistant_stop_lisen", recorder)
                     lisen_commands_flag = False      
                     
 

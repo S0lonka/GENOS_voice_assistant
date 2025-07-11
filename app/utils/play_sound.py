@@ -6,15 +6,15 @@ from typing import Optional
 from app.config.config import APP_LANG
 
 
-def play(sound_name: str, lang: str = APP_LANG, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
+def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
     '''Функция проигрывает звук по нужному пути,
     сразу заботясь о остановке и запуске записи
     
     Args:
         sound_name: имя звукового файла (без расширения)
-        lang: язык на котором говорит Genos
         recorder: опциональный аргумент, передаётся только если нужно останавливать и запускать запись
     '''
+    lang = APP_LANG
     
     if recorder:
         recorder.stop()
