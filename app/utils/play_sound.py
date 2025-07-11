@@ -3,7 +3,10 @@ import simpleaudio
 from pvrecorder import PvRecorder
 from typing import Optional
 
-def play(sound_name: str, lang: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
+from app.config.config import APP_LANG
+
+
+def play(sound_name: str, lang: str = APP_LANG, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
     '''Функция проигрывает звук по нужному пути,
     сразу заботясь о остановке и запуске записи
     

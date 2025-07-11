@@ -1,7 +1,7 @@
 {
     "info":
     {
-        "First launch":{
+        "Token env created":{
             "title" : "Token env created",
             "msg"   : "The token.env file was created, at app/env/token.env"
         },

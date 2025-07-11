@@ -39,7 +39,7 @@ log.basicConfig(level=log.INFO,
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
 
-    play("assistant_deactivate", LANG).wait_done() # Ожидаем завершения звука и после завершаем код
+    play("assistant_deactivate", APP_LANG).wait_done() # Ожидаем завершения звука и после завершаем код
     print("Программа завершается!")
 
 
@@ -52,7 +52,7 @@ async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
     if pcm_result >= 0: # если слышит ключевое слово
                 
         print("- Я тебя слушаю")
-        play("assistant_start_lisen", LANG, recorder)
+        play("assistant_start_lisen", APP_LANG, recorder)
         kaldi_reс.Reset()
 
         ltc = time.time()# обновляем время
@@ -70,7 +70,7 @@ async def main():
     
     recorder.start()
     print("- Я начал работу")
-    play("assistant_activate", LANG)
+    play("assistant_activate", APP_LANG)
 
     
     ltc = time.time() - 1000    # Заранее уведём время в меньшее(1000) чтобы несработал while
@@ -81,7 +81,7 @@ async def main():
             ltc, lisen_commands_flag = await lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag)
 
             while lisen_commands_flag:
-                if time.time() - ltc <= WAITING_WHILE_LISTENING: # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
+                if time.time() - ltc <= float(WAITING_WHILE_LISTENING): # Если небыло ключевого слова то - на - даёт + и мы выходим цикла
                     pcm = recorder.read()   # читаем аудио(в 0 и 1)
 
                     audio_data = '' #? очищаем артефакты прошлой записи audio_data(похоже на костыль)
@@ -100,7 +100,7 @@ async def main():
 
                 else:
                     print("- Прекращаю слушать")
-                    play("assistant_stop_lisen", LANG, recorder)
+                    play("assistant_stop_lisen", APP_LANG, recorder)
                     lisen_commands_flag = False      
                     
 

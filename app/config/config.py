@@ -5,7 +5,7 @@ TOKEN_ENV_PATH = r"app\env\token.env"
 SETTINGS_ENV_PATH = r"app\env\settings.env"
 
 if load_dotenv(SETTINGS_ENV_PATH):
-    LANG = os.getenv("LANG")
+    APP_LANG = os.getenv("APP_LANG")
 
     '''Vosk model - vosk-model-small-ru-0.22'''
     MODEL_PATH = os.getenv("MODEL_PATH")
@@ -16,7 +16,7 @@ if load_dotenv(SETTINGS_ENV_PATH):
 
 else: # Аннотация типов ругается что значения не могут быть None, поэтому нужно их заполнить принудительно
     # БАЗОВЫЕ НАСТРОЙКИ
-    LANG = "RU"
+    APP_LANG = "RU"
     MODEL_PATH = r"app\assistant\model"
     ASSISTANT_NAME_PATH = r"app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn"
     DEVICE_INDEX = -1

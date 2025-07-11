@@ -21,7 +21,7 @@ def createFile_token_env() -> bool:
 
         with open(SETTINGS_ENV_PATH, 'w', encoding="UTF-8") as file:
             file.write(  
-                "LANG=RU" "                    # EN или RU"                                             "\n"
+                "APP_LANG=RU" "                    # EN или RU"                                             "\n"
                 r"MODEL_PATH=app\assistant\model"                                                       "\n"
                 r"ASSISTANT_NAME_PATH=app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn"         "\n"
                 "DEVICE_INDEX=-1" "            # -1 для текущего устройства"                            "\n"
