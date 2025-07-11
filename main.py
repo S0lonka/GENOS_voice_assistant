@@ -70,7 +70,7 @@ async def main():
     
     recorder.start()
     print("- Я начал работу")
-    play("assistant_activate", APP_LANG)
+    play("assistant_activate")
 
     
     ltc = time.time() - 1000    # Заранее уведём время в меньшее(1000) чтобы несработал while
