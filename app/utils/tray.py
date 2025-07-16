@@ -26,6 +26,7 @@ def create_tray(stop_event_flag):
 
     return tray_icon
 
+
 def run_icon(icon, flag_event):
     icon.run()
     flag_event.set()  # Сигнализируем, что трея завершился
