@@ -45,6 +45,7 @@ def create_logger(
     """
     if file_name is None:
         file_name = f"{PROJECT_NAME.replace(' ', '_')}.log"
+        
     logging.basicConfig(
         level=level,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
