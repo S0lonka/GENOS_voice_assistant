@@ -1,0 +1,13 @@
+settings_env_temp = [
+    "APP_LANG=RU",
+    r"MODEL_PATH=app\assistant\model",
+    r"ASSISTANT_NAME_PATH=app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn",
+    "DEVICE_INDEX=-1  # -1 для текущего устройства",
+    "WAITING_WHILE_LISTENING=15",
+    "",
+    ""
+]
+
+token_env_temp = [
+    "PICOVOICE_TOKEN="
+]

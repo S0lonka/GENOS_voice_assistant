@@ -10,7 +10,7 @@ exit_flag = False
 def create_tray(stop_event_flag):
     '''Основной конструктор иконки трея'''
 
-    icon_image = Image.open("app/icon/Genos_hand_whiteBackground_icon.jpg")
+    icon_image = Image.open("app/img/icon/Genos_hand_whiteBackground_icon.jpg")
 
     # Создаём трей
     tray_icon = Icon(

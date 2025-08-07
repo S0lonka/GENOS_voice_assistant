@@ -1,6 +1,6 @@
 # Genos - Voice Assistant
 ---
-![poster](genos_poster.jpg)
+![poster](app/img/posters/genos_poster.jpg)
 ---
 
 ## TODO:
