@@ -24,7 +24,7 @@ from app.utils.VA_RESPONCE import voice_assistant_responce
 # from app.utils.Notification import My_notification
 from app.utils.play_sound import play
 from app.utils.tray import create_tray, run_icon
-from app.utils.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
+from app.utils.file_utils import * 
 from app.utils.general_utils import *
 
 
@@ -102,7 +102,6 @@ async def main():
                     
 
         except KeyboardInterrupt:
-            log.error("Ошибка остановки.")
             logger.error("Error stop...")
             recorder.stop()
             recorder.delete()
@@ -114,8 +113,8 @@ if __name__ == "__main__":
         atexit.register(on_exit) # Добавляет звук при завершении программы
 
         # Проверяем токен и путь до модели
-        if createFile_token_env() and checkFile_token_env() and checkModel_path(MODEL_PATH):
-            log.info("Проверки пройдены (файл token_env, проверка содержания token_env, проверка модели)")
+        if check_file(CONFIG_ENV_PATH) and check_file(LOGGER_CONFIG_ENV_PATH) and check_file(TOKEN_ENV_PATH):
+            logger.info("Проверки пройдены (файл token_env, проверка содержания token_env, проверка модели)")
 
             # Инициализация модели Vosk и создание калди_регонайзера
             model = vosk.Model(MODEL_PATH)
@@ -137,9 +136,10 @@ if __name__ == "__main__":
 
         else:
             logger.warning("Проверки не пройдены")
-            log.warning(f"Проверки не пройдены: файл token_env: {createFile_token_env()},\n\
-                        проверка содержания token_env: {checkFile_token_env()},\n\
-                        проверка модели: {checkModel_path(MODEL_PATH)}")
+            logger.warning(f"Проверки не пройдены:\n\
+                        Конфиг файл: {check_file(CONFIG_ENV_PATH)},\n\
+                        Логгер файл: {check_file(LOGGER_CONFIG_ENV_PATH)},\n\
+                        Токен файл: {check_file(TOKEN_ENV_PATH)}")
             sys.exit(0)
 
     except Exception as e:

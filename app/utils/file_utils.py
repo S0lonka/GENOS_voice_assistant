@@ -3,7 +3,7 @@ import os
 
 from app.utils.general_utils import *
 from app.utils.Notification import My_notification
-from app.template.env_content import config_env_temp
+from app.template.env_content import *
 
 
 
@@ -31,13 +31,18 @@ def check_file(path: str) -> bool:
     if Path(path).is_file():
         return True
     else:
-        name = Path(path).stem                                      # Имя 
-        extension = Path(path).suffix                               # Расширение 
-        variable_name = globals().get(f"{name}_{extension}_temp")   # Итоговое название переменной
-        if create_file(path, variable_name):
+        name = Path(path).stem                                        # Имя 
+        extension = Path(path).suffix[1:]                             # Расширение (без точки)
+        variable_content = globals().get(f"{name}_{extension}_temp")  # Содержимое по названию переменной
 
-            (notyfi  # Показываем уведомление
-            .create_notification(f"WARNING | Создан {extension.upper()} файл", f"Создан файл по пути {path} проверьте и заполните его", duration="long")
+        if variable_content:
+            create_file(path, variable_content)
+
+            # Создаём уведомление
+            (notyfi  
+            .create_notification(f"WARNING | Создан {extension.upper()} файл",
+                                f"Создан файл по пути {path} проверьте и заполните его", 
+                                duration="long")
             .show())
 
             logger.warning(f"Создан файл по пути: {path}")
@@ -45,7 +50,7 @@ def check_file(path: str) -> bool:
             return False
 
         else:
-            logger.error(f"Не найдена итоговая перменная {variable_name}, из за чего не получилось создать файл")
+            logger.error(f"Не найдена итоговая переменная {variable_content}, из за чего не получилось создать файл")
             return False
     
 

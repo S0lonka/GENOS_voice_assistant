@@ -3,9 +3,10 @@ import os
 
 
 TOKEN_ENV_PATH = r"app\env\token.env"
-SETTINGS_ENV_PATH = r"app\env\config.env"
+CONFIG_ENV_PATH = r"app\env\config.env"
+LOGGER_CONFIG_ENV_PATH = r"app\env\logger_config.env"
 
-load_dotenv(SETTINGS_ENV_PATH)
+load_dotenv(CONFIG_ENV_PATH)
 APP_LANG                 = os.getenv("APP_LANG",                 "RU")
 MODEL_PATH               = os.getenv("MODEL_PATH",               r"app\assistant\model")
 ASSISTANT_NAME_PATH      = os.getenv("ASSISTANT_NAME_PATH",      r"app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn")  # Vosk model - vosk-model-small-ru-0.22

@@ -20,10 +20,10 @@ def createFile_token_env() -> bool:
             )
         return False
     
-    elif not os.path.exists(SETTINGS_ENV_PATH):
+    elif not os.path.exists(CONFIG_ENV_PATH):
         os.makedirs("app\\env", exist_ok=True)  # Создаёт папку, если её нет(Без папки не создатся файл)
 
-        with open(SETTINGS_ENV_PATH, 'w', encoding="UTF-8") as file:
+        with open(CONFIG_ENV_PATH, 'w', encoding="UTF-8") as file:
             file.write(  
                 "APP_LANG=RU" "                    # EN или RU"                                         "\n"
                 r"MODEL_PATH=app\assistant\model"                                                       "\n"
