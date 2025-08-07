@@ -62,7 +62,9 @@ def checkModel_path(model_path: str) -> bool:
     '''Проверяет путь до модели и уведомляет'''
     if not os.path.exists(model_path):
         (notify
-        .create_notification("Not found model", f"Model not found, on the way: {model_path}"))
+        .create_notification("Not found model", f"Model not found, on the way: {model_path}")
+        .show())
+
         return False
     else:
         return True

@@ -55,7 +55,7 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
     try:
         recorder.stop() # остановим запись во время обработки
         if voice != "": # Только если не тишина, иначе вернём false
-            logger.info(f"\n- Распознано: {voice}")
+            logger.info(f"- Распознано: {voice}")
             
             found_command, result = check_command(voice) # Вернёт flag = False если не найдёт команду
 

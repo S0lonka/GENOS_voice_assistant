@@ -29,21 +29,22 @@ def toggle_logging(logger: logging.Logger) -> None:
 
 def create_logger(
         name      : str,
-        file_name : str = f"{PROJECT_NAME}.log",
-        level     : int = logging.INFO
+        file_name : str | None = None,
+        level     : int        = logging.INFO
         ) -> logging.Logger:
     """
     Создаёт логгер
 
     Args:
         name      (str) : Имя создаваемого логгера.
-        file_name (str) : Имя файла куда будут записываться логи.
+        file_name (str) : Имя файла куда будут записываться логи (если None Будет назван как имя проекта в config).
         level     (int) : Уровень логгирования от 0 до 50 или в виде logging.WARNING.
 
     Returns:
         Logger : Собранный экземпляр класса.
     """
-
+    if file_name is None:
+        file_name = f"{PROJECT_NAME.replace(' ', '_')}.log"
     logging.basicConfig(
         level=level,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
