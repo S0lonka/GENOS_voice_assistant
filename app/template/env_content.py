@@ -1,4 +1,4 @@
-settings_env_temp = [
+config_env_temp = [
     "APP_LANG=RU",
     r"MODEL_PATH=app\assistant\model",
     r"ASSISTANT_NAME_PATH=app\assistant\assistant_name\genas_en_windows_v3_0_0.ppn",
@@ -11,3 +11,19 @@ settings_env_temp = [
 token_env_temp = [
     "PICOVOICE_TOKEN="
 ]
+
+config_logger_env_temp = [
+    "#----- ENABLE LOGGING ----",
+    "# True  - ON",
+    "# False - OFF",
+    "",
+    "MAIN               = True",
+    "NOTIFICATION       = True",
+    "",
+    "",
+    "",
+    ""
+]
+
+
+

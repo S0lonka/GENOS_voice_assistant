@@ -5,7 +5,7 @@ from app.config.config import APP_LANG
 
 class Translator:
     '''
-    
+    Класс отвечающий за изменение языка в проекте
     '''
     def __init__(self, lang=APP_LANG):
         self.lang = lang

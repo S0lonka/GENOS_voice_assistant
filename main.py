@@ -26,14 +26,10 @@ from app.utils.VA_RESPONCE import voice_assistant_responce
 from app.utils.play_sound import play
 from app.utils.tray import create_tray, run_icon
 from app.utils.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
+from app.utils.general_utils import *
 
 
-
-log.basicConfig(level=log.INFO,
-                filename="Genos_logs.log",
-                filemode='w',
-                format="%(asctime)s - %(levelname)s -/ %(message)s")
-
+create_logger("main")
 
 
 def on_exit():

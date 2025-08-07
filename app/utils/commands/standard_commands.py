@@ -6,7 +6,7 @@ import yaml
 from app.utils.play_sound import play
 
 #config
-from app.config.numbers_word_ru import number_words
+from app.template.numbers_word_temp import number_words
 
 #audio
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, ISimpleAudioVolume
