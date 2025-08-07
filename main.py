@@ -1,4 +1,3 @@
-import os
 import sys
 import struct
 import json
@@ -22,21 +21,22 @@ from app.config.tray_flag import stop_event
 
 #Commands
 from app.utils.VA_RESPONCE import voice_assistant_responce
-# from app.utils.notification import notification
+# from app.utils.Notification import My_notification
 from app.utils.play_sound import play
 from app.utils.tray import create_tray, run_icon
 from app.utils.creates_and_checks import createFile_token_env, checkFile_token_env, checkModel_path 
 from app.utils.general_utils import *
 
 
-create_logger("main")
+logger = create_logger("main")
+toggle_logging(logger)
 
 
 def on_exit():
     '''Для добавления в exit() и проигрывания звука при выключении'''
 
     play("assistant_deactivate").wait_done() # Ожидаем завершения звука и после завершаем код
-    print("Программа завершается!")
+    logger.info("Программа завершается!")
 
 
 
@@ -47,7 +47,7 @@ async def lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag):
             
     if pcm_result >= 0: # если слышит ключевое слово
                 
-        print("- Я тебя слушаю")
+        logger.info("- Я тебя слушаю")
         play("assistant_start_lisen", recorder)
         kaldi_reс.Reset()
 
@@ -65,7 +65,7 @@ async def main():
     recorder = PvRecorder(device_index=int(DEVICE_INDEX), frame_length=porcupine.frame_length)
     
     recorder.start()
-    print("- Я начал работу")
+    logger.info("- Я начал работу")
     play("assistant_activate")
 
     
@@ -95,14 +95,14 @@ async def main():
                     ltc, lisen_commands_flag = await lisen_keyword(recorder, porcupine, ltc, lisen_commands_flag) 
 
                 else:
-                    print("- Прекращаю слушать")
+                    logger.info("- Прекращаю слушать")
                     play("assistant_stop_lisen", recorder)
                     lisen_commands_flag = False      
                     
 
         except KeyboardInterrupt:
             log.error("Ошибка остановки.")
-            print("Error stop...")
+            logger.error("Error stop...")
             recorder.stop()
             recorder.delete()
 
@@ -135,12 +135,12 @@ if __name__ == "__main__":
 
 
         else:
-            print("Проверки не пройдены")
+            logger.warning("Проверки не пройдены")
             log.warning(f"Проверки не пройдены: файл token_env: {createFile_token_env()},\n\
                         проверка содержания token_env: {checkFile_token_env()},\n\
                         проверка модели: {checkModel_path(MODEL_PATH)}")
             sys.exit(0)
 
     except Exception as e:
-        print(e)
+        logger.error(e)
         

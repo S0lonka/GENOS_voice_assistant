@@ -2,12 +2,16 @@ from pvrecorder import PvRecorder
 import vosk
 import yaml
 import os
-import sys
 import inspect
 from typing import Union, Tuple, Optional
 
 
 from app.utils.commands.standard_commands import *
+from app.utils.general_utils import *
+
+logger = create_logger("va_responce")
+toggle_logging(logger)
+
 
 def get_yaml_path(file_name):
     # Путь до файла с командами
@@ -51,14 +55,14 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
     try:
         recorder.stop() # остановим запись во время обработки
         if voice != "": # Только если не тишина, иначе вернём false
-            print(f"\n- Распознано: {voice}")
+            logger.info(f"\n- Распознано: {voice}")
             
             found_command, result = check_command(voice) # Вернёт flag = False если не найдёт команду
 
             if found_command:
                 # Проверяем что такая функция существует И что её можно запустить
                 if result in globals() and callable(globals()[result]):
-                    print(f"- Команда {result} запущена")
+                    logger.info(f"- Команда {result} запущена")
                     handler = globals()[result]
 
                     sig = inspect.signature(handler)
@@ -74,13 +78,13 @@ def voice_assistant_responce(voice: str, recorder: PvRecorder, kaldi_reс: vosk.
                 
 
                 else:
-                    print("Команду не получилось выполнить")
+                    logger.warning("Команду не получилось выполнить")
                     return False
             else:
-                print("Команда не найдена")
+                logger.info("Команда не найдена")
                 return False
         else:
-            print("Ничего не распознано")
+            logger.info("Ничего не распознано")
             return False
     finally:
         kaldi_reс.Reset() #? очистка

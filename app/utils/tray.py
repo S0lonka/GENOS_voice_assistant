@@ -2,10 +2,14 @@ from pystray import Icon, Menu, MenuItem
 from PIL import Image
 
 from app.config.tray_flag import stop_event 
+from app.utils.general_utils import create_logger, toggle_logging
+
 
 # Глобальный флаг для выхода
 exit_flag = False
 
+logger = create_logger("tray")
+toggle_logging(logger)
 
 def create_tray(stop_event_flag):
     '''Основной конструктор иконки трея'''
@@ -33,7 +37,7 @@ def run_icon(icon, flag_event):
 
 
 def off_assistant(icon, item, stop_event_flag):
-    print("Пользователь выбрал 'Выход'")
+    logger.info("Пользователь выбрал 'Выход'")
     
     icon.stop()
     stop_event_flag.set()

@@ -1,5 +1,5 @@
 from app.config.config import *
-from app.utils.notification import notification
+from app.utils.Notification import My_notification
 
 
 def createFile_token_env() -> bool:

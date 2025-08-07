@@ -1,4 +1,3 @@
-import simpleaudio as sa
 import simpleaudio
 from pvrecorder import PvRecorder
 from typing import Optional
@@ -29,7 +28,7 @@ def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.
     else:
         sound_path = f"app/sounds/{lang}/{sound_name}.wav"
 
-    wave_obj = sa.WaveObject.from_wave_file(sound_path).play()
+    wave_obj = simpleaudio.WaveObject.from_wave_file(sound_path).play()
 
 
     if recorder:
