@@ -1,6 +1,7 @@
 from app.config.config import *
 from app.utils.Notification import My_notification
 
+notify = My_notification()
 
 def createFile_token_env() -> bool:
     '''Создаёт  файл токеном/настройками, если его нет'''
@@ -13,7 +14,10 @@ def createFile_token_env() -> bool:
             (
                 "PICOVOICE_TOKEN=<токен_picovoice>"
             )
-            notification("Token env created", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+            (notify
+            .create_notification("Token env created", "the token.env file was created, at app/env/token.env") # Уведомляет пользователя о создании файла
+            .show()
+            )
         return False
     
     elif not os.path.exists(SETTINGS_ENV_PATH):
@@ -27,7 +31,10 @@ def createFile_token_env() -> bool:
                 "DEVICE_INDEX=-1" "            # -1 для текущего устройства"                            "\n"
                 "WAITING_WHILE_LISTENING=15" " # Время которое будет слушать бот после своего имени"
             )
-            notification("Settings env created", "the token.env file was created, at app/env/settings.env")
+            (notify
+            .create_notification("Settings env created", "the token.env file was created, at app/env/settings.env")
+            .show()
+            )
         return False
     
     else:
@@ -41,7 +48,9 @@ def checkFile_token_env() -> bool:
 
         # Проверям чтобы был введён токен
         if token_env_text in ["PICOVOICE_TOKEN=<токен_picovoice>", "PICOVOICE_TOKEN","PICOVOICE_TOKEN=" , ""]:
-            notification("Not found PICOVOICE_TOKEN", "Please fill in the field with the token on the path app/env/token.env")
+            (notify
+            .create_notification("Not found PICOVOICE_TOKEN", "Please fill in the field with the token on the path app/env/token.env")
+            .show())
             return False
         else:
             return True
@@ -52,7 +61,8 @@ def checkFile_token_env() -> bool:
 def checkModel_path(model_path: str) -> bool:
     '''Проверяет путь до модели и уведомляет'''
     if not os.path.exists(model_path):
-        notification("Not found model", f"Model not found, on the way: {model_path}")
+        (notify
+        .create_notification("Not found model", f"Model not found, on the way: {model_path}"))
         return False
     else:
         return True
