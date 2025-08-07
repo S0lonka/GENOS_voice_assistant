@@ -3,7 +3,11 @@ from pvrecorder import PvRecorder
 from typing import Optional
 
 from app.config.config import APP_LANG
+from app.utils.general_utils import create_logger, toggle_logging
 
+
+logger = create_logger("play_sound")
+toggle_logging(logger)
 
 def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.PlayObject:
     '''Функция проигрывает звук по нужному пути,
@@ -29,6 +33,7 @@ def play(sound_name: str, recorder: Optional[PvRecorder] = None) -> simpleaudio.
         sound_path = f"app/sounds/{lang}/{sound_name}.wav"
 
     wave_obj = simpleaudio.WaveObject.from_wave_file(sound_path).play()
+    logger.info(f"Проигран звук {sound_name}")
 
 
     if recorder:
