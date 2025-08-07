@@ -31,7 +31,7 @@ config_logger_env_temp = [
     "FILE_UTILS         = True",
     "GENERAL_UTILS      = True",
     "CONFIG_UTILS       = True",
-    "BROWSER_ACTIONS    = True",
+    "VA_RESPONCE        = True",
     "TRAY               = True",
     "PLAY_SOUND         = True"
 ]

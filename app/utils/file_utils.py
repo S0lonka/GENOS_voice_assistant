@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 
 from app.utils.general_utils import *
-from app.utils.Notification import My_notification
+from app.utils.notification import My_notification
 from app.template.env_content import *
 
 
